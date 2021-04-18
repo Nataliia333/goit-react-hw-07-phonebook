@@ -1,26 +1,24 @@
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import contactsOperations from '../../redux/contacts/contacts-operations';
+import contactsSelectors from '../../redux/contacts/contacts-selectors';
 import styles from './ContactsList.module.css';
 
-const ContactsList = ({ filter, contacts, onDelete }) => {
-  const onFilterContacts = () => {
-    const filterContacts = contacts.filter(contact =>
-      contact.name.toLowerCase().includes(filter.toLowerCase()),
-    );
-    return filterContacts;
-  };
-
+const ContactsList = ({
+  contacts,
+  isLoadingContacts,
+  onDelete,
+  fetchContacts,
+}) => {
+  useEffect(() => fetchContacts(), []);
   const handlerDelete = event => {
     onDelete(event.currentTarget.id);
-    // console.log(event.target.id);
-
-    // console.log(event.currentTarget.id);
   };
 
   return (
     <ul>
-      {(filter ? onFilterContacts() : contacts).map(({ id, name, number }) => (
+      {contacts.map(({ id, name, number }) => (
         <li key={id}>
           {name}: {number}
           <button
@@ -31,7 +29,7 @@ const ContactsList = ({ filter, contacts, onDelete }) => {
           >
             Delete
           </button>
-          {this.props.isLoadingContacts && <h1>Загружаем...</h1>}
+          {isLoadingContacts && <h1>Loading...</h1>}
         </li>
       ))}
     </ul>
@@ -40,9 +38,9 @@ const ContactsList = ({ filter, contacts, onDelete }) => {
 
 const mapStateToProps = state => {
   return {
-    contacts: state.contacts.items,
-    filter: state.contacts.filter,
-    isLoadingContactss: state.contacts.loading,
+    contacts: contactsSelectors.getVisibleContacts(state),
+    filter: contactsSelectors.getFilter(state),
+    isLoadingContacts: contactsSelectors.getLoading(state),
   };
 };
 
@@ -52,7 +50,6 @@ const mapDispatchProps = dispatch => ({
 });
 
 ContactsList.propTypes = {
-  filter: PropTypes.string,
   contacts: PropTypes.arrayOf(PropTypes.object),
   onDelete: PropTypes.func.isRequired,
 };

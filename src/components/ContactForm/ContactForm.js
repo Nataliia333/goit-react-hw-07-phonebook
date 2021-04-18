@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import contactsOperations from '../../redux/contacts/contacts-operations';
-// import { v4 as uuid } from 'uuid';
+import contactsSelectors from '../../redux/contacts/contacts-selectors';
+
 import PropTypes from 'prop-types';
 
 import styles from './ContactForm.module.css';
@@ -17,7 +18,8 @@ const ContactForm = ({ contacts, onAdd }) => {
     return Names.includes(item.name);
   };
 
-  const onSave = () => {
+  const onSave = event => {
+    event.preventDefault();
     isAlreadyContact()
       ? alert(`${item.name} is already in contacts.`)
       : onAdd(item);
@@ -38,7 +40,7 @@ const ContactForm = ({ contacts, onAdd }) => {
 
 const mapStateToProps = state => {
   return {
-    contacts: state.contacts.items,
+    contacts: contactsSelectors.getContacts(state),
   };
 };
 

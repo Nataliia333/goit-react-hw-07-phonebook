@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import * as actions from '../../redux/contacts/contacts-actions';
+import { updateFilter } from '../../redux/contacts/contacts-actions';
 
 const Filter = ({ updateFilter }) => {
   return (
@@ -17,7 +17,7 @@ const Filter = ({ updateFilter }) => {
 
 const mapDispatchProps = dispatch => {
   return {
-    updateFilter: event => dispatch(actions.updateFilter(event.target.value)),
+    updateFilter: event => dispatch(updateFilter(event.target.value)),
   };
 };
 
