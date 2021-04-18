@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import actions from '../../redux/contacts/contacts-actions';
+import contactsOperations from '../../redux/contacts/contacts-operations';
 // import { v4 as uuid } from 'uuid';
 import PropTypes from 'prop-types';
 
@@ -44,7 +44,7 @@ const mapStateToProps = state => {
 
 const mapDispatchProps = dispatch => {
   return {
-    onAdd: value => dispatch(actions.addContact(value)),
+    onAdd: value => dispatch(contactsOperations.addContact(value)),
   };
 };
 
