@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import actions from '../../redux/contacts/contacts-actions';
+import contactsOperations from '../../redux/contacts/contacts-operations';
 import styles from './ContactsList.module.css';
 
 const ContactsList = ({ filter, contacts, onDelete }) => {
@@ -12,8 +12,8 @@ const ContactsList = ({ filter, contacts, onDelete }) => {
   };
 
   const handlerDelete = event => {
-    onDelete(event.target.id);
-    console.log(event.target.id);
+    onDelete(event.currentTarget.id);
+    // console.log(event.target.id);
 
     // console.log(event.currentTarget.id);
   };
@@ -31,6 +31,7 @@ const ContactsList = ({ filter, contacts, onDelete }) => {
           >
             Delete
           </button>
+          {this.props.isLoadingContacts && <h1>Загружаем...</h1>}
         </li>
       ))}
     </ul>
@@ -41,11 +42,13 @@ const mapStateToProps = state => {
   return {
     contacts: state.contacts.items,
     filter: state.contacts.filter,
+    isLoadingContactss: state.contacts.loading,
   };
 };
 
 const mapDispatchProps = dispatch => ({
-  onDelete: value => dispatch(actions.deleteContact(value)),
+  fetchContacts: () => dispatch(contactsOperations.fetchContacts()),
+  onDelete: value => dispatch(contactsOperations.deleteContact(value)),
 });
 
 ContactsList.propTypes = {
